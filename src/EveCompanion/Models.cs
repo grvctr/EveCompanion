@@ -10,9 +10,9 @@ public sealed class AppState
 
 public sealed class CompanionSettings
 {
-    public string ClientId { get; set; } = "";
+    public string ClientId { get; set; } = "a9b3396d8cbd45df9ae06b8fc744e22a";
     public string CallbackUrl { get; set; } = "http://localhost:53682/callback/";
-    public string UserAgent { get; set; } = "EVECompanionMvp/0.1 (add-contact-email)";
+    public string UserAgent { get; set; } = "EVECompanion/0.1 (https://github.com/grvctr/EveCompanion)";
 }
 
 public sealed class IskSession

@@ -35,13 +35,13 @@ dotnet run --project .\src\EveCompanion\EveCompanion.csproj -- --self-test
 ## EVE developer setup
 
 1. Register an application at [EVE Developers](https://developers.eveonline.com/).
-2. Copy its **Client ID**.
+2. The official open-source build already includes this project's public **Client ID**. Forks should register their own application and replace it in Settings.
 3. Register the exact callback URL used by the application. The MVP default is `http://localhost:53682/callback/`.
 4. Enable only the required read-only scopes:
    - `esi-assets.read_assets.v1`
    - `esi-wallet.read_character_wallet.v1`
    - `esi-markets.read_character_orders.v1`
-5. Add a contact email to the ESI User-Agent setting.
+5. Keep the repository URL or another maintainer contact in the ESI User-Agent setting.
 
 Do not embed a client secret in a desktop build. The planned login flow uses PKCE, a local callback listener, and Windows-protected refresh-token storage.
 
