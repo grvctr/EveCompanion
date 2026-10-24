@@ -1,0 +1,217 @@
+﻿<Window x:Class="EveCompanion.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="EVE Companion MVP"
+        Width="1180" Height="760" MinWidth="960" MinHeight="640"
+        WindowStartupLocation="CenterScreen">
+    <Grid Background="#0B1020">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="34" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.RowSpan="2" Background="#10172A" BorderBrush="#29334D" BorderThickness="0,0,1,0">
+            <DockPanel Margin="18">
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Text="EVE" Foreground="{StaticResource AccentBrush}" FontSize="30" FontWeight="Bold" />
+                    <TextBlock Text="COMPANION  ·  MVP" Foreground="{StaticResource MutedBrush}" Margin="0,0,0,28" />
+                    <Button Content="Dashboard" Tag="0" Click="Navigate_Click" HorizontalContentAlignment="Left" />
+                    <Button Content="ISK Tracker" Tag="1" Click="Navigate_Click" HorizontalContentAlignment="Left" />
+                    <Button Content="Аномалии" Tag="2" Click="Navigate_Click" HorizontalContentAlignment="Left" />
+                    <Button Content="Market / Assets" Tag="3" Click="Navigate_Click" HorizontalContentAlignment="Left" />
+                    <Button Content="Overlay" Tag="4" Click="Navigate_Click" HorizontalContentAlignment="Left" />
+                    <Button Content="Настройки" Tag="5" Click="Navigate_Click" HorizontalContentAlignment="Left" />
+                </StackPanel>
+                <TextBlock DockPanel.Dock="Bottom" Text="Локальный помощник. Не управляет клиентом EVE." TextWrapping="Wrap" Foreground="{StaticResource MutedBrush}" FontSize="11" />
+            </DockPanel>
+        </Border>
+
+        <TabControl x:Name="MainTabs" Grid.Column="1" Margin="22,16,22,10" Background="#0B1020" BorderThickness="0" SelectedIndex="0">
+            <TabControl.Template>
+                <ControlTemplate TargetType="TabControl">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter ContentSource="SelectedContent" />
+                    </Border>
+                </ControlTemplate>
+            </TabControl.Template>
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Setter Property="Background" Value="#0B1020" />
+                    <Setter Property="Foreground" Value="#ECF4FF" />
+                </Style>
+            </TabControl.Resources>
+
+            <TabItem>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Dashboard" FontSize="28" FontWeight="SemiBold" />
+                        <TextBlock Text="Сводка текущей игровой сессии" Foreground="{StaticResource MutedBrush}" Margin="0,3,0,20" />
+                        <UniformGrid Columns="3" Margin="0,0,0,18">
+                            <Border Background="{StaticResource PanelBrush}" BorderBrush="{StaticResource PanelBorderBrush}" BorderThickness="1" CornerRadius="6" Margin="0,0,10,0" Padding="18">
+                                <StackPanel><TextBlock Text="СЕССИЯ" Foreground="{StaticResource MutedBrush}" /><TextBlock x:Name="DashboardStateText" Text="не запущена" FontSize="21" Margin="0,8,0,0" /></StackPanel>
+                            </Border>
+                            <Border Background="{StaticResource PanelBrush}" BorderBrush="{StaticResource PanelBorderBrush}" BorderThickness="1" CornerRadius="6" Margin="0,0,10,0" Padding="18">
+                                <StackPanel><TextBlock Text="ИТОГО" Foreground="{StaticResource MutedBrush}" /><TextBlock x:Name="DashboardTotalText" Text="0 ISK" FontSize="21" Margin="0,8,0,0" /></StackPanel>
+                            </Border>
+                            <Border Background="{StaticResource PanelBrush}" BorderBrush="{StaticResource PanelBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="18">
+                                <StackPanel><TextBlock Text="СКОРОСТЬ" Foreground="{StaticResource MutedBrush}" /><TextBlock x:Name="DashboardRateText" Text="0 ISK/ч" FontSize="21" Margin="0,8,0,0" Foreground="{StaticResource AccentBrush}" /></StackPanel>
+                            </Border>
+                        </UniformGrid>
+                        <GroupBox Header="Быстрые действия">
+                            <StackPanel>
+                                <TextBlock x:Name="DashboardDurationText" Text="Длительность: —" Margin="0,0,0,12" />
+                                <WrapPanel>
+                                    <Button Content="Начать сессию" Click="StartSession_Click" />
+                                    <Button Content="Завершить сессию" Click="StopSession_Click" />
+                                    <Button Content="Открыть ISK Tracker" Tag="1" Click="Navigate_Click" />
+                                    <Button Content="Показать overlay" Click="ToggleOverlay_Click" />
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Границы MVP">
+                            <TextBlock Text="Доход вводится вручную. Приложение не читает память, экран, логи, сетевой трафик или ввод клиента EVE и не выполняет игровые действия." TextWrapping="Wrap" Foreground="{StaticResource MutedBrush}" />
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="ISK Tracker" FontSize="28" FontWeight="SemiBold" />
+                        <TextBlock Text="Ручной учёт чистого дохода и расходов по сессиям" Foreground="{StaticResource MutedBrush}" Margin="0,3,0,14" />
+                    </StackPanel>
+                    <GroupBox Grid.Row="1" Header="Текущая сессия">
+                        <Grid>
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition Width="180" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,12,0"><TextBlock Text="Изменение ISK" /><TextBox x:Name="IncomeAmountTextBox" Margin="0,5,0,0" ToolTip="Плюс — доход, минус — расход" /></StackPanel>
+                            <StackPanel Grid.Column="1" Margin="0,0,12,0"><TextBlock Text="Заметка" /><TextBox x:Name="IncomeNoteTextBox" Margin="0,5,0,0" /></StackPanel>
+                            <TextBlock Grid.Column="2" x:Name="TrackerMessageText" VerticalAlignment="Center" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" Margin="0,18,12,0" />
+                            <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Bottom">
+                                <Button Content="Добавить" Click="AddIncome_Click" />
+                                <Button Content="Старт" Click="StartSession_Click" />
+                                <Button Content="Стоп" Click="StopSession_Click" />
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Grid.Row="2" Header="История сессий">
+                        <DataGrid x:Name="SessionsGrid" AlternationCount="2">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Начало" Binding="{Binding StartedText}" Width="150" />
+                                <DataGridTextColumn Header="Конец" Binding="{Binding EndedText}" Width="150" />
+                                <DataGridTextColumn Header="Время" Binding="{Binding DurationText}" Width="90" />
+                                <DataGridTextColumn Header="Итого" Binding="{Binding TotalText}" Width="150" />
+                                <DataGridTextColumn Header="ISK/ч" Binding="{Binding RateText}" Width="150" />
+                                <DataGridTextColumn Header="Записей" Binding="{Binding Entries.Count}" Width="80" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem>
+                <Grid>
+                    <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition /></Grid.RowDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Каталог аномалий" FontSize="28" FontWeight="SemiBold" />
+                        <TextBlock Text="Грубая оценка по корпусу, не замена проверке фита и механик в клиенте" Foreground="{StaticResource MutedBrush}" Margin="0,3,0,14" />
+                    </StackPanel>
+                    <WrapPanel Grid.Row="1" Margin="0,0,0,14">
+                        <TextBlock Text="Текущий корабль:" VerticalAlignment="Center" Margin="0,0,10,8" />
+                        <ComboBox x:Name="ShipComboBox" Width="190" Margin="0,0,10,8" SelectionChanged="ShipComboBox_SelectionChanged" />
+                    </WrapPanel>
+                    <DataGrid x:Name="AnomaliesGrid" Grid.Row="2" AlternationCount="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Сайт" Binding="{Binding Name}" Width="190" />
+                            <DataGridTextColumn Header="Тип" Binding="{Binding Kind}" Width="120" />
+                            <DataGridTextColumn Header="Пространство" Binding="{Binding Space}" Width="120" />
+                            <DataGridTextColumn Header="Оценка" Binding="{Binding Assessment}" Width="150" />
+                            <DataGridTextColumn Header="Подсказка" Binding="{Binding Guidance}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Market / Assets" FontSize="28" FontWeight="SemiBold" />
+                        <TextBlock Text="Публичный рынок работает без входа; личные данные ждут EVE SSO" Foreground="{StaticResource MutedBrush}" Margin="0,3,0,14" />
+                        <GroupBox Header="Публичный рынок ESI">
+                            <StackPanel>
+                                <WrapPanel>
+                                    <StackPanel Margin="0,0,12,0"><TextBlock Text="Region ID" /><TextBox x:Name="RegionIdTextBox" Text="10000002" Width="130" Margin="0,5,0,0" /></StackPanel>
+                                    <StackPanel Margin="0,0,12,0"><TextBlock Text="Type ID" /><TextBox x:Name="TypeIdTextBox" Text="34" Width="130" Margin="0,5,0,0" /></StackPanel>
+                                    <Button x:Name="MarketSearchButton" Content="Получить лучшие цены" Click="MarketSearch_Click" VerticalAlignment="Bottom" />
+                                </WrapPanel>
+                                <TextBlock x:Name="MarketResultText" Margin="0,10,0,0" Text="По умолчанию: The Forge / Tritanium. Запрос выполняется только по кнопке." TextWrapping="Wrap" />
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Личные активы и ордера">
+                            <StackPanel>
+                                <TextBlock Text="Заготовлен безопасный OAuth2 PKCE-поток и минимальные read-only scopes:" TextWrapping="Wrap" />
+                                <TextBlock Margin="12,8,0,8" Foreground="{StaticResource MutedBrush}" Text="esi-assets.read_assets.v1&#x0a;esi-wallet.read_character_wallet.v1&#x0a;esi-markets.read_character_orders.v1" />
+                                <TextBlock Text="Фактический вход и хранение refresh token ещё не подключены: сначала нужен Client ID разработчика EVE." TextWrapping="Wrap" Foreground="{StaticResource MutedBrush}" />
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem>
+                <StackPanel>
+                    <TextBlock Text="Overlay" FontSize="28" FontWeight="SemiBold" />
+                    <TextBlock Text="Прозрачное click-through окно поверх оконного / borderless EVE" Foreground="{StaticResource MutedBrush}" Margin="0,3,0,18" />
+                    <GroupBox Header="Состояние">
+                        <StackPanel>
+                            <TextBlock x:Name="OverlayStatusText" Text="Overlay выключен" FontSize="18" Margin="0,0,0,12" />
+                            <Button x:Name="OverlayToggleButton" Content="Показать overlay" Click="ToggleOverlay_Click" Width="180" HorizontalAlignment="Left" />
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="Безопасность">
+                        <TextBlock Text="Окно только показывает локальные цифры ISK Tracker. Оно не внедряется в EVE, не перехватывает клики и не отправляет клавиши. CCP не публикует исчерпывающий список разрешённых конфигураций сторонних инструментов — используйте на свой риск и отключите при сомнениях." TextWrapping="Wrap" Foreground="{StaticResource MutedBrush}" />
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Настройки" FontSize="28" FontWeight="SemiBold" />
+                        <TextBlock Text="Локальные параметры EVE SSO / ESI" Foreground="{StaticResource MutedBrush}" Margin="0,3,0,14" />
+                        <GroupBox Header="EVE Developer application">
+                            <StackPanel>
+                                <TextBlock Text="Client ID" /><TextBox x:Name="ClientIdTextBox" Margin="0,5,0,12" />
+                                <TextBlock Text="Callback URL" /><TextBox x:Name="CallbackUrlTextBox" Margin="0,5,0,12" />
+                                <TextBlock Text="ESI User-Agent (добавьте контактный email)" /><TextBox x:Name="UserAgentTextBox" Margin="0,5,0,12" />
+                                <WrapPanel>
+                                    <Button Content="Сохранить" Click="SaveSettings_Click" />
+                                    <Button Content="Проверить PKCE URL" Click="PreviewSso_Click" />
+                                </WrapPanel>
+                                <TextBlock x:Name="SettingsMessageText" Foreground="{StaticResource AccentBrush}" TextWrapping="Wrap" />
+                                <TextBlock x:Name="SsoPreviewText" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" Margin="0,8,0,0" />
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Локальные данные">
+                            <TextBlock x:Name="DataPathText" TextWrapping="Wrap" Foreground="{StaticResource MutedBrush}" />
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <Border Grid.Row="1" Grid.Column="1" BorderBrush="#29334D" BorderThickness="0,1,0,0">
+            <TextBlock x:Name="GlobalStatusText" Margin="22,7" Foreground="{StaticResource MutedBrush}" Text="Готово" />
+        </Border>
+    </Grid>
+</Window>
